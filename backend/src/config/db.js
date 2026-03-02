@@ -1,5 +1,12 @@
+const path = require('path');
+require('dotenv').config({
+  path: path.resolve(__dirname, '../../.env')
+});
+
 const { Pool } = require('pg');
-require('dotenv').config();
+
+console.log("ENV PATH LOADED");
+console.log("DB PASSWORD:", process.env.DB_PASSWORD);
 
 const pool = new Pool({
   host: process.env.DB_HOST,
