@@ -10,7 +10,6 @@ http://localhost:3000/api/tareas/id metodo:PUT actualizar tarea
 http://localhost:3000/api/tareas/id/completar metodo: PATCH cambiar estado
 */
 
-
 //crear una nueva tarea
 router.post('/', verificarToken, controller.crearTarea);
 //consultar todas las tareas
