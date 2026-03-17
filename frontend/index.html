@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificador Estudiantil - Estudia Inteligente</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Boxicons for icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="blobs">
+        <div class="blob shape1"></div>
+        <div class="blob shape2"></div>
+        <div class="blob shape3"></div>
+    </div>
+    
+    <!-- Auth Overlay -->
+    <div id="authOverlay" class="auth-overlay active">
+        <div class="auth-container glass-panel">
+            <div class="logo justify-center">
+                <i class='bx bxs-graduation'></i>
+                <span>StuPlan</span>
+            </div>
+            
+            <div id="loginFormContainer">
+                <h2 style="text-align: center; margin-bottom: 20px;">Iniciar Sesión</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" id="loginEmail" required placeholder="tu@correo.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="primary-btn full-width" style="margin-top: 20px;">Entrar</button>
+                    <p style="text-align: center; margin-top: 15px; font-size: 14px; color: var(--text-muted);">
+                        ¿No tienes cuenta? <a href="#" id="showRegister" style="color: var(--primary);">Regístrate</a>
+                    </p>
+                </form>
+            </div>
+
+            <div id="registerFormContainer" style="display: none;">
+                <h2 style="text-align: center; margin-bottom: 20px;">Crear Cuenta</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label>Nombre de Usuario</label>
+                        <input type="text" id="registerName" required placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" id="registerEmail" required placeholder="tu@correo.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="registerPassword" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="primary-btn full-width" style="margin-top: 20px;">Registrarse</button>
+                    <p style="text-align: center; margin-top: 15px; font-size: 14px; color: var(--text-muted);">
+                        ¿Ya tienes cuenta? <a href="#" id="showLogin" style="color: var(--primary);">Inicia Sesión</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" id="appContainer" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class='bx bxs-graduation'></i>
+                <span>StuPlan</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#dashboard" class="nav-item active" data-target="dashboard">
+                    <i class='bx bx-grid-alt'></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="#subjects" class="nav-item" data-target="subjects">
+                    <i class='bx bx-book-bookmark'></i>
+                    <span>Materias</span>
+                </a>
+                <a href="#schedule" class="nav-item" data-target="schedule">
+                    <i class='bx bx-calendar-event'></i>
+                    <span>Horario</span>
+                </a>
+                <a href="#homework" class="nav-item" data-target="homework">
+                    <i class='bx bx-task'></i>
+                    <span>Tareas</span>
+                </a>
+            </nav>
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Estudiante&background=random" alt="User Avatar" class="avatar">
+                <div class="user-info">
+                    <span class="user-name">Bienvenido,</span>
+                    <span class="user-role" id="currentUserDisplay">Estudiante</span>
+                </div>
+                <button class="icon-btn" id="logoutBtn" title="Cerrar Sesión" style="margin-left: auto; width: 32px; height: 32px; font-size: 16px;">
+                    <i class='bx bx-log-out'></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <h1 id="page-title">Inicio</h1>
+                <div class="header-actions">
+                    <button class="icon-btn theme-toggle" title="Cambiar Tema">
+                        <i class='bx bx-moon'></i>
+                    </button>
+                    <button class="primary-btn" id="global-add-btn">
+                        <i class='bx bx-plus'></i> Añadir
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="view-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon"><i class='bx bx-book'></i></div>
+                            <div class="stat-info">
+                                <h3>Materias Activas</h3>
+                                <p class="stat-value" id="stat-subjects">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon"><i class='bx bx-task'></i></div>
+                            <div class="stat-info">
+                                <h3>Tareas Pendientes</h3>
+                                <p class="stat-value" id="stat-homeworks">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <div class="stat-icon"><i class='bx bx-calendar-check'></i></div>
+                            <div class="stat-info">
+                                <h3>Clases de Hoy</h3>
+                                <p class="stat-value" id="stat-classes">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-widgets">
+                        <div class="widget glass-panel">
+                            <h2>Próximas Tareas</h2>
+                            <div class="widget-content" id="upcoming-homework-list">
+                                <!-- Dynamic content -->
+                                <p class="empty-state">No hay tareas próximas. ¡Excelente trabajo!</p>
+                            </div>
+                        </div>
+                        <div class="widget glass-panel">
+                            <h2>Horario de Hoy</h2>
+                            <div class="widget-content" id="today-schedule-list">
+                                <!-- Dynamic content -->
+                                <p class="empty-state">No hay clases programadas para hoy.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Subjects Section -->
+                <section id="subjects" class="view-section">
+                    <div class="section-header">
+                        <h2>Mis Materias</h2>
+                        <button class="secondary-btn" onclick="openModal('subjectModal')">
+                            <i class='bx bx-plus'></i> Nueva Materia
+                        </button>
+                    </div>
+                    <div class="grid-layout" id="subjects-container">
+                        <!-- Dynamic content -->
+                        <div class="empty-container">
+                            <i class='bx bx-book-add'></i>
+                            <p>Aún no has añadido ninguna materia.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Schedule Section -->
+                <section id="schedule" class="view-section">
+                    <div class="section-header">
+                        <h2>Horario Semanal</h2>
+                        <div class="schedule-actions">
+                             <button class="secondary-btn" onclick="openModal('periodModal')">
+                                <i class='bx bx-plus'></i> Nuevo Periodo
+                            </button>
+                        </div>
+                    </div>
+                    <div class="schedule-table-container glass-panel">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Lunes</th>
+                                    <th>Martes</th>
+                                    <th>Miércoles</th>
+                                    <th>Jueves</th>
+                                    <th>Viernes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-body">
+                                <!-- Dynamic row generation -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Homework Section -->
+                <section id="homework" class="view-section">
+                    <div class="section-header">
+                        <h2>Tareas y Trabajos</h2>
+                        <div class="filter-group">
+                            <button class="filter-btn active" data-filter="all">Todas</button>
+                            <button class="filter-btn" data-filter="pending">Pendientes</button>
+                            <button class="filter-btn" data-filter="completed">Completadas</button>
+                        </div>
+                        <button class="secondary-btn" onclick="openModal('homeworkModal')">
+                            <i class='bx bx-plus'></i> Nueva Tarea
+                        </button>
+                    </div>
+                    <div class="list-layout" id="homework-container">
+                        <!-- Dynamic content -->
+                        <div class="empty-container">
+                            <i class='bx bx-task-x'></i>
+                            <p>No hay tareas para mostrar.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Subject Modal -->
+    <div class="modal" id="subjectModal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal" onclick="closeModal('subjectModal')"><i class='bx bx-x'></i></span>
+            <h2 id="subjectModalTitle">Añadir Nueva Materia</h2>
+            <form id="subjectForm">
+                <input type="hidden" id="subjectId">
+                <div class="form-group">
+                    <label for="subjectName">Nombre de la Materia</label>
+                    <input type="text" id="subjectName" required placeholder="Ej. Matemáticas">
+                </div>
+                <div class="form-group">
+                    <label for="subjectTeacher">Profesor/a</label>
+                    <input type="text" id="subjectTeacher" placeholder="Nombre del profesor">
+                </div>
+                <div class="form-group">
+                    <label>Color</label>
+                    <div class="color-picker" id="subjectColorPicker">
+                        <div class="color-option" data-color="#ff4757" style="background: #ff4757;"></div>
+                        <div class="color-option" data-color="#ffa502" style="background: #ffa502;"></div>
+                        <div class="color-option" data-color="#2ed573" style="background: #2ed573;"></div>
+                        <div class="color-option active" data-color="#1e90ff" style="background: #1e90ff;"></div>
+                        <div class="color-option" data-color="#9b59b6" style="background: #9b59b6;"></div>
+                        <div class="color-option" data-color="#ff6b81" style="background: #ff6b81;"></div>
+                    </div>
+                    <input type="hidden" id="subjectColor" value="#1e90ff">
+                </div>
+                <button type="submit" class="primary-btn full-width">Guardar Materia</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Period Modal -->
+    <div class="modal" id="periodModal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal" onclick="closeModal('periodModal')"><i class='bx bx-x'></i></span>
+            <h2>Añadir Periodo de Clase</h2>
+            <form id="periodForm">
+                <input type="hidden" id="periodId">
+                <div class="form-group">
+                    <label for="periodSubject">Materia</label>
+                    <select id="periodSubject" required>
+                        <!-- Dynamic options -->
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="periodDay">Día</label>
+                        <select id="periodDay" required>
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miércoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="periodTimeStart">Hora de Inicio</label>
+                        <input type="time" id="periodTimeStart" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="periodTimeEnd">Hora de Fin</label>
+                        <input type="time" id="periodTimeEnd" required>
+                    </div>
+                </div>
+                <button type="submit" class="primary-btn full-width">Añadir al Horario</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Homework Modal -->
+    <div class="modal" id="homeworkModal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal" onclick="closeModal('homeworkModal')"><i class='bx bx-x'></i></span>
+            <h2 id="homeworkModalTitle">Añadir Tarea</h2>
+            <form id="homeworkForm">
+                <input type="hidden" id="homeworkId">
+                <div class="form-group">
+                    <label for="homeworkTitle">Título de la Tarea</label>
+                    <input type="text" id="homeworkTitle" required placeholder="¿Qué hay que hacer?">
+                </div>
+                <div class="form-group">
+                    <label for="homeworkSubject">Materia</label>
+                    <select id="homeworkSubject" required>
+                        <!-- Dynamic Options -->
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="homeworkDueDate">Fecha de Entrega</label>
+                        <input type="date" id="homeworkDueDate" required>
+                    </div>
+                    <!-- The backend does not support priority, so we will omit it -->
+                </div>
+                <div class="form-group">
+                    <label for="homeworkNotes">Descripción</label>
+                    <textarea id="homeworkNotes" rows="3" placeholder="Detalles adicionales..."></textarea>
+                </div>
+                <button type="submit" class="primary-btn full-width">Guardar Tarea</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="components.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
