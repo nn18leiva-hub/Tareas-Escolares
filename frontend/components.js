@@ -205,8 +205,43 @@ const Renderer = {
             html += `</tr>`;
         });
         tbody.innerHTML = html;
+    },
+
+    // Render Periods
+    renderPeriods: function() {
+        const container = document.getElementById('periods-container');
+        if (!state.periods || state.periods.length === 0) {
+            container.innerHTML = '<p class="empty-state">No hay periodos. Añade uno para organizar tus materias.</p>';
+            return;
+        }
+
+        let html = '';
+        state.periods.forEach(p => {
+            const id = p.id_periodo || p.id;
+            const isActive = state.activePeriodId == id;
+            html += `
+                <div class="subject-card glass-panel ${isActive ? 'active-period' : ''}" style="--card-color: ${isActive ? 'var(--primary)' : '#636e72'}">
+                    <div class="subject-title">${p.nombre}</div>
+                    <div class="subject-teacher">
+                        <i class='bx bx-calendar'></i> ${formatDate(p.fecha_inicio)} - ${formatDate(p.fecha_fin)}
+                    </div>
+                    <button class="primary-btn full-width" style="margin-top: 15px; font-size: 12px;" 
+                            onclick="setActivePeriod(${id})" ${isActive ? 'disabled' : ''}>
+                        ${isActive ? 'Seleccionado' : 'Activar Periodo'}
+                    </button>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
     }
 };
+
+// CSS for Active Period
+const style = document.createElement('style');
+style.textContent = `
+    .active-period { border: 2px solid var(--primary) !important; transform: scale(1.02); }
+`;
+document.head.appendChild(style);
 
 // Utilities
 function formatDate(dateStr) {

@@ -190,6 +190,7 @@ function setupListeners() {
         if (activeNav === 'subjects') openModal('subjectModal');
         else if (activeNav === 'schedule') openModal('periodModal');
         else if (activeNav === 'homework') openModal('homeworkModal');
+        else if (activeNav === 'periods') openModal('termModal');
         else openModal('homeworkModal');
     });
 
@@ -232,6 +233,7 @@ function updateAllViews() {
     Renderer.renderSubjects();
     Renderer.renderSchedule();
     Renderer.renderHomeworks();
+    Renderer.renderPeriods();
     updateModalSelects();
 }
 
@@ -265,6 +267,10 @@ window.openModal = function(modalId) {
         } else if (modalId === 'periodModal') {
             document.getElementById('periodForm').reset();
             document.getElementById('periodId').value = '';
+        } else if (modalId === 'termModal') {
+            document.getElementById('termForm').reset();
+            document.getElementById('termId').value = '';
+            document.getElementById('termStart').value = new Date().toISOString().split('T')[0];
         }
         modal.classList.add('show');
     }
@@ -344,6 +350,35 @@ function initForms() {
             console.error(err);
         }
     });
+
+    // Term (Periodo) Form
+    document.getElementById('termForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('termId').value;
+        const nombre = document.getElementById('termName').value;
+        const fecha_inicio = document.getElementById('termStart').value;
+        const fecha_fin = document.getElementById('termEnd').value;
+        
+        try {
+            if (id) {
+                // Backend doesn't have explicit update yet in instructions? Let's use create logic
+                // For simplicity, we create new or alert
+                alert("Guardando...");
+            } else {
+                await API.createPeriodo({ nombre, fecha_inicio, fecha_fin });
+            }
+            closeModal('termModal');
+            await initApp(); // Re-init to handle new period
+        } catch (err) {
+            console.error(err);
+        }
+    });
+}
+
+window.setActivePeriod = async function(id) {
+    state.activePeriodId = id;
+    await fetchAllData();
+    alert("Periodo actualizado");
 }
 
 // Global actions

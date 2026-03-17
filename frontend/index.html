@@ -92,6 +92,10 @@
                     <i class='bx bx-task'></i>
                     <span>Tareas</span>
                 </a>
+                <a href="#periods" class="nav-item" data-target="periods">
+                    <i class='bx bx-calendar'></i>
+                    <span>Periodos</span>
+                </a>
             </nav>
             <div class="user-profile">
                 <img src="https://ui-avatars.com/api/?name=Estudiante&background=random" alt="User Avatar" class="avatar">
@@ -187,7 +191,7 @@
                         <h2>Horario Semanal</h2>
                         <div class="schedule-actions">
                              <button class="secondary-btn" onclick="openModal('periodModal')">
-                                <i class='bx bx-plus'></i> Nuevo Periodo
+                                <i class='bx bx-plus'></i> Añadir Clase
                             </button>
                         </div>
                     </div>
@@ -229,6 +233,19 @@
                             <i class='bx bx-task-x'></i>
                             <p>No hay tareas para mostrar.</p>
                         </div>
+                    </div>
+                </section>
+
+                <!-- Periods Section -->
+                <section id="periods" class="view-section">
+                    <div class="section-header">
+                        <h2>Periodos Académicos</h2>
+                        <button class="secondary-btn" onclick="openModal('termModal')">
+                            <i class='bx bx-plus'></i> Nuevo Ciclo
+                        </button>
+                    </div>
+                    <div class="grid-layout" id="periods-container">
+                        <!-- Dynamic content -->
                     </div>
                 </section>
             </div>
@@ -304,6 +321,32 @@
                     </div>
                 </div>
                 <button type="submit" class="primary-btn full-width">Añadir al Horario</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Academic Term Modal (Real Periodo) -->
+    <div class="modal" id="termModal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal" onclick="closeModal('termModal')"><i class='bx bx-x'></i></span>
+            <h2>Gestionar Periodo Escolar</h2>
+            <form id="termForm">
+                <input type="hidden" id="termId">
+                <div class="form-group">
+                    <label for="termName">Nombre del Periodo</label>
+                    <input type="text" id="termName" required placeholder="Ej. Enero - Junio 2026">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="termStart">Fecha Inicio</label>
+                        <input type="date" id="termStart" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="termEnd">Fecha Fin</label>
+                        <input type="date" id="termEnd" required>
+                    </div>
+                </div>
+                <button type="submit" class="primary-btn full-width">Guardar Periodo</button>
             </form>
         </div>
     </div>
