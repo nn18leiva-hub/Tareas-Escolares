@@ -141,7 +141,7 @@ const Renderer = {
             
             html += `
                 <div class="homework-item glass-panel ${isCompleted ? 'hw-item-completed' : ''}">
-                    <div class="hw-checkbox ${isCompleted ? 'checked' : ''}" onclick="toggleHomework(${hw.id})">
+                    <div class="hw-checkbox ${isCompleted ? 'checked' : ''}" onclick="toggleHomework(${hw.id_tarea})">
                         <i class='bx bx-check'></i>
                     </div>
                     <div class="hw-content">
@@ -193,7 +193,7 @@ const Renderer = {
                         const sub = this.getSubject(c.id_materia);
                         html += `
                             <div class="schedule-cell" style="background: ${sub.color_hex}">
-                                <button class="delete-period" onclick="deletePeriod(${c.id_horario})"><i class='bx bx-x'></i></button>
+                                <button class="delete-period" onclick="deleteScheduleEntry(${c.id_horario})"><i class='bx bx-x'></i></button>
                                 <div class="schedule-subject">${sub.nombre}</div>
                                 <div class="schedule-room">${formatTime(c.hora_inicio)} - ${formatTime(c.hora_fin)}</div>
                             </div>
@@ -221,11 +221,14 @@ const Renderer = {
             const isActive = state.activePeriodId == id;
             html += `
                 <div class="subject-card glass-panel ${isActive ? 'active-period' : ''}" style="--card-color: ${isActive ? 'var(--primary)' : '#636e72'}">
+                    <div class="subject-actions">
+                        ${!isActive ? `<button class="action-btn delete" onclick="deletePeriodoActual(${id})"><i class='bx bx-trash'></i></button>` : ''}
+                    </div>
                     <div class="subject-title">${p.nombre}</div>
                     <div class="subject-teacher">
                         <i class='bx bx-calendar'></i> ${formatDate(p.fecha_inicio)} - ${formatDate(p.fecha_fin)}
                     </div>
-                    <button class="primary-btn full-width" style="margin-top: 15px; font-size: 12px;" 
+                    <button class="primary-btn full-width" style="margin-top: 15px; font-size: 12px; border: none; background: ${isActive ? 'var(--primary)' : '#636e72'}" 
                             onclick="setActivePeriod(${id})" ${isActive ? 'disabled' : ''}>
                         ${isActive ? 'Seleccionado' : 'Activar Periodo'}
                     </button>

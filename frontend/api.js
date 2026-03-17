@@ -82,6 +82,7 @@ const API = {
     // --- Periodos ---
     async getPeriodos() { return this.request('/periodos'); },
     async createPeriodo(data) { return this.request('/periodos', 'POST', data); },
+    async deletePeriodo(id) { return this.request(`/periodos/${id}`, 'DELETE'); },
 
     // --- Materias ---
     async getMaterias() { return this.request('/materias'); },

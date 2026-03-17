@@ -443,11 +443,20 @@ window.toggleHomework = async function(id) {
     } catch(e){ console.error(e); }
 }
 
-window.deletePeriod = async function(id) {
+window.deleteScheduleEntry = async function(id) {
     if(confirm('¿Remover clase del horario?')) {
         try {
             await API.deleteHorario(id);
             await fetchAllData();
+        } catch (e) { console.error(e); }
+    }
+}
+
+window.deletePeriodoActual = async function(id) {
+    if(confirm('¿Estás seguro de eliminar este ciclo académico? Se borrarán todas las materias y tareas asociadas.')) {
+        try {
+            await API.deletePeriodo(id);
+            await initApp();
         } catch (e) { console.error(e); }
     }
 }
