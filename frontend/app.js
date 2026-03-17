@@ -216,6 +216,33 @@ function setupListeners() {
     });
 
     initForms();
+    setupConfirmModal();
+}
+
+function setupConfirmModal() {
+    const modal = document.getElementById('confirmModal');
+    const cancelBtn = document.getElementById('confirmCancel');
+    const proceedBtn = document.getElementById('confirmProceed');
+
+    cancelBtn.onclick = () => {
+        modal.classList.remove('show');
+        if (window._confirmResolve) window._confirmResolve(false);
+    };
+
+    proceedBtn.onclick = () => {
+        modal.classList.remove('show');
+        if (window._confirmResolve) window._confirmResolve(true);
+    };
+}
+
+window.customConfirm = function(title, message) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('confirmModal');
+        document.getElementById('confirmTitle').textContent = title;
+        document.getElementById('confirmMessage').textContent = message;
+        modal.classList.add('show');
+        window._confirmResolve = resolve;
+    });
 }
 
 function applyTheme(theme) {
@@ -383,7 +410,8 @@ window.setActivePeriod = async function(id) {
 
 // Global actions
 window.deleteSubject = async function(id) {
-    if(confirm('¿Estás seguro de eliminar esta materia?')) {
+    const confirmed = await customConfirm('¿Eliminar Materia?', 'Se borrarán también las tareas y horarios asociados.');
+    if(confirmed) {
         try {
             await API.deleteMateria(id);
             await fetchAllData();
@@ -409,7 +437,8 @@ window.editSubject = function(id) {
 }
 
 window.deleteHomework = async function(id) {
-    if(confirm('¿Borrar esta tarea?')) {
+    const confirmed = await customConfirm('¿Borrar Tarea?', 'Esta tarea se eliminará permanentemente.');
+    if(confirmed) {
         try {
             await API.deleteTarea(id);
             await fetchAllData();
@@ -444,7 +473,8 @@ window.toggleHomework = async function(id) {
 }
 
 window.deleteScheduleEntry = async function(id) {
-    if(confirm('¿Remover clase del horario?')) {
+    const confirmed = await customConfirm('¿Remover clase?', 'Se quitará esta entrada de tu horario semanal.');
+    if(confirmed) {
         try {
             await API.deleteHorario(id);
             await fetchAllData();
@@ -453,10 +483,15 @@ window.deleteScheduleEntry = async function(id) {
 }
 
 window.deletePeriodoActual = async function(id) {
-    if(confirm('¿Estás seguro de eliminar este ciclo académico? Se borrarán todas las materias y tareas asociadas.')) {
+    const confirmed = await customConfirm('¿Eliminar Ciclo?', 'ADVERTENCIA: Se borrarán ABSOLUTAMENTE TODAS las materias, tareas y horarios de este periodo.');
+    if(confirmed) {
         try {
             await API.deletePeriodo(id);
-            await initApp();
+            // If we deleted the active one, we need to reset state
+            if (id == state.activePeriodId) {
+                state.activePeriodId = null;
+            }
+            await initApp(); // Re-fetch or create default
         } catch (e) { console.error(e); }
     }
 }

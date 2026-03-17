@@ -222,7 +222,7 @@ const Renderer = {
             html += `
                 <div class="subject-card glass-panel ${isActive ? 'active-period' : ''}" style="--card-color: ${isActive ? 'var(--primary)' : '#636e72'}">
                     <div class="subject-actions">
-                        ${!isActive ? `<button class="action-btn delete" onclick="deletePeriodoActual(${id})"><i class='bx bx-trash'></i></button>` : ''}
+                        <button class="action-btn delete" onclick="deletePeriodoActual(${id})"><i class='bx bx-trash'></i></button>
                     </div>
                     <div class="subject-title">${p.nombre}</div>
                     <div class="subject-teacher">

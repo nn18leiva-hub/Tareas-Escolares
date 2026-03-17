@@ -384,6 +384,21 @@
         </div>
     </div>
 
+    <!-- Custom Confirm Modal -->
+    <div class="modal confirmation-modal" id="confirmModal">
+        <div class="modal-content glass-panel" style="max-width: 380px; text-align: center;">
+            <div class="confirm-icon" style="font-size: 48px; color: var(--danger); margin-bottom: 20px;">
+                <i class='bx bx-error-circle'></i>
+            </div>
+            <h2 id="confirmTitle" style="margin-bottom: 10px;">¿Estás seguro?</h2>
+            <p id="confirmMessage" style="color: var(--text-muted); margin-bottom: 25px;">Esta acción no se puede deshacer.</p>
+            <div class="confirm-actions" style="display: flex; gap: 12px; justify-content: center;">
+                <button class="secondary-btn" id="confirmCancel" style="flex: 1;">Cancelar</button>
+                <button class="primary-btn" id="confirmProceed" style="flex: 1; background: var(--danger);">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="api.js"></script>
     <script src="components.js"></script>
     <script src="app.js"></script>
