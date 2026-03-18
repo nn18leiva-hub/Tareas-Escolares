@@ -81,7 +81,7 @@ exports.marcarComoCompletada = async (req, res) => {
   try {
     const result = await pool.query(
       `UPDATE tareas t
-       SET completada = TRUE
+       SET completada = NOT t.completada
        FROM materias m
        JOIN periodos p ON m.id_periodo = p.id_periodo
        WHERE t.id_tarea = $1
